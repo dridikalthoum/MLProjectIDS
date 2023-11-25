@@ -1,0 +1,39 @@
+#  non supervisee
+# KDDTrain+.TXT
+# KDDTrain+_20Percent.TXT
+# KDDTest+.TXT
+# KDDTest-21.TXT
+# supervisee
+# KDDTrain+.ARFF
+# KDDTrain+_20Percent.ARFF
+# KDDTest+.ARFF
+# KDDTest-21.ARFF
+
+
+# Supposons que votre DataFrame s'appelle 'data'
+# Sélectionnez seulement les colonnes avec des variables numériques
+numerical_columns = data.select_dtypes(include=['int64', 'float64']).columns
+
+# Calcul des limites inférieures et supérieures pour chaque colonne
+Q1 = data[numerical_columns].quantile(0.25)
+Q3 = data[numerical_columns].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# Identification des outliers
+outliers = ((data[numerical_columns] < lower_bound) | (data[numerical_columns] > upper_bound))
+
+# Afficher le nombre d'outliers dans chaque colonne
+outliers_count = outliers.sum()
+print("Nombre d'outliers par colonne :")
+print(outliers_count)
+
+# Afficher les statistiques des outliers
+outliers_stats = data[numerical_columns][outliers.any(axis=1)]
+print("Statistiques des outliers :")
+print(outliers_stats.describe())
+
+
+
+lezem nverifiw outliers iùportant
